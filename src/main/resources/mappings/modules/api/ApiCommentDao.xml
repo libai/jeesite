@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gome.trend.modules.api.dao.ApiCommentDao">
+    
+	<sql id="goCommentColumns">
+		a.comment_id AS "commentId",
+		a.comment_content AS "commentContent",
+		a.status AS "status",
+		a.is_reply AS "isReply",
+		a.reply_comment_id AS "replyCommentId",
+		a.reply_uid AS "replyUid",
+		a.post_uid AS "postUid",
+		a.photo_id AS "photoId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.del_by AS "delBy"
+	</sql>
+	
+	<sql id="goCommentJoins">
+	</sql>
+    
+	<select id="get" resultType="ApiComment">
+		SELECT 
+			<include refid="goCommentColumns"/>
+		FROM go_comment a
+		<include refid="goCommentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ApiComment">
+		SELECT 
+			<include refid="goCommentColumns"/>
+		FROM go_comment a
+		<include refid="goCommentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ApiComment">
+		SELECT 
+			<include refid="goCommentColumns"/>
+		FROM go_comment a
+		<include refid="goCommentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO go_comment(
+			comment_content,
+			post_uid,
+			photo_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			del_by
+		) VALUES (
+			#{commentContent},
+			#{postUid},
+			#{photoId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{delBy}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE go_comment SET 	
+			comment_content = #{commentContent},
+			status = #{status},
+			post_uid = #{postUid},
+			photo_id = #{photoId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			del_by = #{delBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE go_comment SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
