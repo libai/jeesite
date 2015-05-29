@@ -13,9 +13,9 @@
 	<!-- 用户缓存 -->
 	<cache name="userCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true"/>
 	
-	<!-- 工作流模块缓存 -->
+	<!-- 工作流模块缓存 
 	<cache name="actCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true"/>
-	
+	-->
 	<!-- 内容管理模块缓存
 	<cache name="cmsCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true"/> -->
 	
