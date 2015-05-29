@@ -39,11 +39,12 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>
 		<choose>
+	
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.photo_id DESC
 			</otherwise>
 		</choose>
 	</select>
@@ -119,7 +120,7 @@
 	<update id="delete">
 		UPDATE go_photo SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+		WHERE photo_id = #{photoId}
 	</update>
 	
 </mapper>

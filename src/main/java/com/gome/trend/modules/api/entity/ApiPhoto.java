@@ -24,6 +24,13 @@ public class ApiPhoto extends DataEntity<ApiPhoto> {
 	private String color;		// 图片颜色值
 	private String status;		// 图片状态，1，正常，0异常
 	
+	//参数列表
+	private String startId;		// 图片开始id
+	private String forward;
+	private String limit;
+	
+
+	
 	public ApiPhoto() {
 		super();
 	}
@@ -31,7 +38,29 @@ public class ApiPhoto extends DataEntity<ApiPhoto> {
 	public ApiPhoto(String id){
 		super(id);
 	}
-
+	//参数
+	public String getStartId() {
+		return startId;
+	}
+	public void setStartId(String startId) {
+		this.startId = startId;
+	}
+	
+	public String getForward() {
+		return forward;
+	}
+	public void setForward(String forward) {
+		this.forward = forward;
+	}
+	
+	public String getLimit() {
+		return limit;
+	}
+	public void setLimit(String limit) {
+		this.limit = limit;
+	}
+	
+	
 	@Length(min=1, max=64, message="图片id长度必须介于 1 和 64 之间")
 	public String getPhotoId() {
 		return photoId;
