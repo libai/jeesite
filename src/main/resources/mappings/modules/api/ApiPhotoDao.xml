@@ -39,7 +39,9 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>
 		<choose>
-	
+			<when test="startId != null and startId != ''">
+				AND a.photo_id>#{startId}
+			</when>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
 			</when>
