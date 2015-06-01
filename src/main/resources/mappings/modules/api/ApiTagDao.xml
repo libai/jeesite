@@ -48,7 +48,16 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<!--  
+	<select id="findListByPhotoIds" resultType="ApiTag">
+		SELECT 
+			<include refid="goTagColumns"/>
+		FROM go_tag a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.photo_id IN (${photoids})
+		</where>
+	</select>
+	-->
 	<select id="findAllList" resultType="ApiTag">
 		SELECT 
 			<include refid="goTagColumns"/>

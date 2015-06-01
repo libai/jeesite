@@ -3,6 +3,8 @@
  */
 package com.gome.trend.modules.api.dao;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.gome.trend.modules.api.entity.ApiTag;
@@ -14,5 +16,7 @@ import com.gome.trend.modules.api.entity.ApiTag;
  */
 @MyBatisDao
 public interface ApiTagDao extends CrudDao<ApiTag> {
+
+	//List<ApiTag> findListByPhotoIds(String[] photoids);
 	
 }

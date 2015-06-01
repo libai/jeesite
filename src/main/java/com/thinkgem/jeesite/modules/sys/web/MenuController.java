@@ -113,7 +113,7 @@ public class MenuController extends BaseController {
 		return "redirect:" + adminPath + "/sys/menu/";
 	}
 
-	@RequiresPermissions("user")
+	//@RequiresPermissions("user")
 	@RequestMapping(value = "tree")
 	public String tree() {
 		return "modules/sys/menuTree";

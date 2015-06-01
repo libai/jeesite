@@ -4,6 +4,7 @@
 package com.gome.trend.modules.api.web;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gome.trend.modules.api.entity.ApiParams;
 import com.gome.trend.modules.api.entity.ApiPhoto;
+import com.gome.trend.modules.api.entity.ApiPhotoResponse;
 import com.gome.trend.modules.api.service.ApiPhotoService;
 import com.gome.trend.modules.content.entity.GoPhoto;
 
@@ -49,7 +50,7 @@ public class ApiPhotoController extends BaseController {
 	public String list(@RequestBody String params, ApiPhoto apiPhoto, HttpServletRequest request, HttpServletResponse response, Model model) {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
-		System.out.println(params);
+		
 		try {
 			if(!"".equals(params)){
 				apiPhoto = objectMapper.readValue(params, ApiPhoto.class);
@@ -65,26 +66,23 @@ public class ApiPhotoController extends BaseController {
 			e.printStackTrace();
 		}
 		
-		//454413807
-		
-		//System.out.println(apiPhoto.getStartId());
-		//model.addAttribute("isSuccess", "Y");
 		
 		List<ApiPhoto> photoList = apiPhotoService.findList(apiPhoto);
 		
 	
+		List<ApiPhotoResponse> apiPhotoResponse =  apiPhotoService.getResponseRows(photoList);
 		
 		//model.addAttribute("photoList", photoList);
 	
-		
-		return renderString(response, photoList);
+		System.out.println(apiPhotoResponse);
+		return renderString(response, apiPhotoResponse);
 	}
 
 	@RequestMapping(value = {"like", ""})
 	public String like(@RequestBody String params,ApiPhoto apiPhoto, HttpServletRequest request, HttpServletResponse response, Model model) throws JsonParseException, JsonMappingException, IOException {
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		ApiParams apiParams = objectMapper.readValue(params, ApiParams.class);
+		ApiPhoto apiParams = objectMapper.readValue(params, ApiPhoto.class);
 		//用户登陆认证
 		
 		

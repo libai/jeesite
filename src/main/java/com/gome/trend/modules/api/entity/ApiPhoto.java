@@ -3,6 +3,8 @@
  */
 package com.gome.trend.modules.api.entity;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -29,7 +31,6 @@ public class ApiPhoto extends DataEntity<ApiPhoto> {
 	private String forward;
 	private String limit;
 	
-
 	
 	public ApiPhoto() {
 		super();
@@ -131,5 +132,7 @@ public class ApiPhoto extends DataEntity<ApiPhoto> {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+
 	
 }
