@@ -28,7 +28,7 @@
 			<include refid="goCommentColumns"/>
 		FROM go_comment a
 		<include refid="goCommentJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.comment_id = #{id} 
 	</select>
 	
 	<select id="findList" resultType="ApiComment">
@@ -39,12 +39,72 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>
+	
+			<if test="startId != null and startId != '' and startId !='0'">
+				AND a.comment_id
+					<choose>
+						<when test='forward == "Y"'>
+						>
+						</when>
+						<otherwise>	
+						 &lt;
+						</otherwise>
+					</choose>	
+				#{startId}
+			</if>
+	
+			<if test="photoId != null and photoId != ''">
+				AND a.photo_id=#{photoId}
+			</if>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
 			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
+				<otherwise>	
+			ORDER BY a.comment_id DESC
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="limit !=null and limit != ''">
+					limit 0,${limit}
+			</when>
+				<otherwise>	
+			limit 0,10
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findListByParams" parameterType="Map" resultType="ApiComment">
+		SELECT 
+			<include refid="goCommentColumns"/>
+		FROM go_comment a
+		<include refid="goCommentJoins"/>
+		<where>
+			a.del_flag=0
+		</where>
+			<if test="startId != null and startId != '' and startId !='0'">
+				AND a.comment_id
+					<choose>
+						<when test='forward == "Y"'>
+						>
+						</when>
+						<otherwise>	
+						 &lt;
+						</otherwise>
+					</choose>	
+				#{startId}
+			</if>
+	
+			<if test="photoId != null and photoId != ''">
+				AND a.photo_id=#{photoId}
+			</if>
+			ORDER BY a.comment_id DESC
+		<choose>
+			<when test="limit !=null and limit != ''">
+					limit 0,${limit}
+			</when>
+				<otherwise>	
+			limit 0,10
 			</otherwise>
 		</choose>
 	</select>
@@ -67,29 +127,114 @@
 		</choose>
 	</select>
 	
+	<select id="findByIdIn" resultType="Article">
+		SELECT 
+			<include refid="goCommentColumns"/>
+		FROM go_comment a
+		<where>
+			comment_id in (${id});
+		</where>		
+	</select>
+	<select id="findListByProcedure" parameterType="Map"  statementType="CALLABLE"  resultType="ApiComment">
+ 	  <![CDATA[  
+	 	{
+		  call Pro_SelectCommentByPhotoIds(
+		  #{photoids}
+		  ,#{limit}
+		  )
+	    }
+        ]]> 
+	</select>
+	
+	<select id="findTest"  statementType="CALLABLE"  resultType="ApiComment">
+	   call Pro_SelectTest()
+	</select>
+	
+	<select id="proHello" statementType="CALLABLE">  
+    <![CDATA[  
+        {call pro_hello (#{p_user_name,mode=IN,jdbcType=VARCHAR})}  
+    ]]>  
+    </select>  
+	<!--
+	<select id="findListByPhotoIds" resultType="ApiComment">
+		SET @mid = "";
+		SET @rownum = 0;
+		SELECT *, case when @mid = photo_id then @rownum:=@rownum+1 else @rownum:=1 end rownum, @mid:=photo_id FROM go_comment 
+		<where>
+			del_flag = 0 AND 
+			photo_id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+				#{item}  
+			</foreach>
+		</where>
+		ORDER BY photo_id,create_date DESC;
+	</select>
+  -->
+	<select id="findCountByPhotoId" resultType="int">
+		SELECT 	COUNT(1) FROM go_comment
+		del_flag = 0 AND 
+		photo_id = #{photoId}
+	</select>
+	
+	<select id="getNext" parameterType="Map" resultType="ApiComment">
+		SELECT
+		<include refid="goCommentColumns"/>
+		 FROM go_comment a
+		<where>
+			a.del_flag = 0
+		</where>
+	
+			<if test="startId != null and startId != ''">
+				AND a.comment_id
+					<choose>
+						<when test='forward == "Y"'>
+						>
+						</when>
+						<otherwise>	
+						 &lt;
+						</otherwise>
+					</choose>	
+				#{startId}
+			</if>
+			
+			<if test="photoId != null and photoId != ''">
+				AND a.photo_id=#{photoId}
+			</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>	
+			ORDER BY a.comment_id DESC	 
+			</otherwise>
+		</choose>
+		limit 0,1
+	</select>
+	
+	
 	<insert id="insert">
 		INSERT INTO go_comment(
 			comment_content,
 			post_uid,
 			photo_id,
-			create_by,
+			is_reply,
+			reply_comment_id,
+			reply_uid,
 			create_date,
-			update_by,
-			update_date,
 			remarks,
-			del_flag,
-			del_by
+			del_flag
+
 		) VALUES (
 			#{commentContent},
 			#{postUid},
 			#{photoId},
-			#{createBy.id},
+			#{isReply},
+			#{replyCommentId},
+			#{replyUid},
 			#{createDate},
-			#{updateBy.id},
-			#{updateDate},
 			#{remarks},
-			#{delFlag},
-			#{delBy}
+			#{delFlag}
+
 		)
 	</insert>
 	
@@ -103,13 +248,15 @@
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			del_by = #{delBy}
-		WHERE id = #{id}
+		WHERE comment_id = #{id}
 	</update>
 	
 	<update id="delete">
 		UPDATE go_comment SET 
-			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+			del_flag = #{DEL_FLAG_DELETE},
+			del_by   = #{postUid},
+			update_date = #{updateDate}
+		WHERE comment_id = #{commentId} AND post_uid = #{postUid}
 	</update>
 	
 </mapper>

@@ -20,7 +20,7 @@ public class ApiLike extends DataEntity<ApiLike> {
 	private static final long serialVersionUID = 1L;
 	private String photoId;		// 图片id
 	private String uid;		// 用户id
-	private Date timeCreate;		// 创建时间
+
 	
 	public ApiLike() {
 		super();
@@ -48,14 +48,5 @@ public class ApiLike extends DataEntity<ApiLike> {
 		this.uid = uid;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@NotNull(message="创建时间不能为空")
-	public Date getTimeCreate() {
-		return timeCreate;
-	}
-
-	public void setTimeCreate(Date timeCreate) {
-		this.timeCreate = timeCreate;
-	}
 	
 }

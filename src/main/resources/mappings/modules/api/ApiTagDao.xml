@@ -48,16 +48,31 @@
 			</otherwise>
 		</choose>
 	</select>
-	<!--  
+	
 	<select id="findListByPhotoIds" resultType="ApiTag">
-		SELECT 
-			<include refid="goTagColumns"/>
-		FROM go_tag a
+		SELECT * FROM go_tag 
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL} AND a.photo_id IN (${photoids})
+			del_flag = 0 AND 
+			photo_id in
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+			 #{item}  
+			</foreach>  
 		</where>
 	</select>
-	-->
+	
+		
+	<select id="findCountByPhotoIds" resultType="long">
+		SELECT 	COUNT(1) FROM go_tag
+		<where>
+			del_flag = 0 AND 
+			photo_id in
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+			 #{item}  
+			</foreach>  
+		</where>
+		GROUP BY photo_id
+	</select>
+
 	<select id="findAllList" resultType="ApiTag">
 		SELECT 
 			<include refid="goTagColumns"/>

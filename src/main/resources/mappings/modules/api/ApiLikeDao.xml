@@ -5,7 +5,7 @@
 	<sql id="goLikeColumns">
 		a.photo_id AS "photoId",
 		a.uid AS "uid",
-		a.time_create AS "timeCreate"
+		a.create_date AS "createDate"
 	</sql>
 	
 	<sql id="goLikeJoins">
@@ -53,29 +53,57 @@
 		</choose>
 	</select>
 	
+		
+	<select id="findListByPhotoIds" resultType="ApiLike">
+		SELECT * FROM go_like 
+		<where>
+			photo_id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+			 #{item}  
+			</foreach>  
+		</where>
+	</select>
+	
+	<select id="findCountByPhotoId" parameterType="Map" resultType="int">
+		SELECT count(1) FROM go_like 
+		<where>
+			photo_id =  #{photoId}  
+		</where>
+	</select>
+	<select id="findCountByPhotoIds" resultType="long">
+		SELECT 	COUNT(1) FROM go_like
+		<where>
+			photo_id in
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+			 #{item}  
+			</foreach>  
+		</where>
+		GROUP BY photo_id
+	</select>
+	<select id="findIsLiked" resultType="int">
+		SELECT 	COUNT(1) FROM go_like
+		<where>
+			photo_id = #{photoId}
+			AND uid = #{uid}
+		</where>
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO go_like(
 			photo_id,
 			uid,
-			time_create
+			create_date
 		) VALUES (
 			#{photoId},
 			#{uid},
-			#{timeCreate}
+			#{createDate}
 		)
 	</insert>
-	
-	<update id="update">
-		UPDATE go_like SET 	
-			photo_id = #{photoId},
-			uid = #{uid},
-			time_create = #{timeCreate}
-		WHERE id = #{id}
-	</update>
+
 	
 	<update id="delete">
 		DELETE FROM go_like
-		WHERE id = #{id}
+		WHERE photo_id = #{photoId} AND uid = #{uid}
 	</update>
 	
 </mapper>

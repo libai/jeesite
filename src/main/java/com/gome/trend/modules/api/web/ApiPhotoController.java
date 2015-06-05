@@ -4,6 +4,7 @@
 package com.gome.trend.modules.api.web;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +29,16 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gome.trend.modules.api.entity.ApiLike;
 import com.gome.trend.modules.api.entity.ApiPhoto;
 import com.gome.trend.modules.api.entity.ApiPhotoResponse;
+import com.gome.trend.modules.api.entity.ApiResponse;
+import com.gome.trend.modules.api.entity.ApiTag;
+import com.gome.trend.modules.api.service.ApiLikeService;
 import com.gome.trend.modules.api.service.ApiPhotoService;
+import com.gome.trend.modules.api.service.ApiTagService;
+import com.gome.trend.modules.api.service.GomeInterFaceService;
+import com.gome.trend.modules.api.util.Request;
 import com.gome.trend.modules.content.entity.GoPhoto;
 
 
@@ -45,57 +53,115 @@ public class ApiPhotoController extends BaseController {
 
 	@Autowired
 	private ApiPhotoService apiPhotoService;
+	@Autowired
+	private ApiTagService apiTagService;
+	@Autowired
+	private ApiLikeService apiLikeService;
 	
-	@RequestMapping(value = {"list", ""})
-	public String list(@RequestBody String params, ApiPhoto apiPhoto, HttpServletRequest request, HttpServletResponse response, Model model) {
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-		try {
-			if(!"".equals(params)){
-				apiPhoto = objectMapper.readValue(params, ApiPhoto.class);
-			}
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		List<ApiPhoto> photoList = apiPhotoService.findList(apiPhoto);
-		
+	@RequestMapping(value = {"getList", ""})
+	public String list(@RequestBody String params, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+		ApiResponse<ApiPhotoResponse> apiResponse = new ApiResponse<ApiPhotoResponse>();
+		//请求参数
+		HashMap<String, String> paramMap = Request.parseParams(params);
 	
-		List<ApiPhotoResponse> apiPhotoResponse =  apiPhotoService.getResponseRows(photoList);
+		List<ApiPhoto> photoList = apiPhotoService.findListByParams(paramMap);
+
+		List<ApiPhotoResponse> apiPhotos =  apiPhotoService.getResponseRows(photoList);
 		
-		//model.addAttribute("photoList", photoList);
-	
-		System.out.println(apiPhotoResponse);
-		return renderString(response, apiPhotoResponse);
+		apiResponse.setDataRows(apiPhotos);
+		
+		return renderString(response, "{}");
 	}
 
 	@RequestMapping(value = {"like", ""})
 	public String like(@RequestBody String params,ApiPhoto apiPhoto, HttpServletRequest request, HttpServletResponse response, Model model) throws JsonParseException, JsonMappingException, IOException {
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		ApiPhoto apiParams = objectMapper.readValue(params, ApiPhoto.class);
-		//用户登陆认证
-		
-		
-		
-		//是否已赞
-		
-		
-		
 	
+		ApiResponse<ApiLike> apiResponse = new ApiResponse<ApiLike>();
 		
+		//请求参数
+		HashMap<String, String> paramMap = Request.parseParams(params);
 		
-		return renderString(response, "{}");
+		ApiLike apiLike = new ApiLike();
+		//用户登陆认证
+		String uid = GomeInterFaceService.getLoginUser(request, response);
+		if("".equals(uid) || uid == null){
+			apiResponse.SetError("E001", "用户不存在");
+			return renderString(response, apiResponse);
+		}
+		apiLike.setUid(uid);
+		//图片id
+		if(StringUtils.isEmpty(paramMap.get("photoId"))){
+			apiResponse.SetError("E201", "图片不存在");
+			return renderString(response, apiResponse);
+		}
+		apiLike.setPhotoId(paramMap.get("photoId"));
+		//是否已赞
+		if(apiLikeService.isLiked(apiLike)){
+			apiResponse.SetError("E202", "用户已赞过");
+			return renderString(response, apiResponse);
+		}
+		apiLike.setCreateDate(new Date());
+		int res = apiLikeService.save(apiLike);
+		if(res<1){
+			apiResponse.SetError("E203", "点赞失败");
+			return renderString(response, apiResponse);
+		}
+		
+		apiPhotoService.updateCount("like_count", "a", apiLike.getPhotoId());
+		apiResponse.setSuccessMessage("点赞成功");
+		
+		return renderString(response, apiResponse);
 	}
+	
+	@RequestMapping(value = {"unlike", ""})
+	public String unlike(@RequestBody String params, ApiPhoto apiPhoto, HttpServletRequest request, HttpServletResponse response, Model model) throws JsonParseException, JsonMappingException, IOException {
+		
+		ApiResponse<ApiLike> apiResponse = new ApiResponse<ApiLike>();
+		//请求参数
+		HashMap<String, String> paramMap = Request.parseParams(params);
+		
+		ApiLike apiLike = new ApiLike();
+
+		//用户登陆认证
+		String uid = GomeInterFaceService.getLoginUser(request, response);
+		if(StringUtils.isEmpty(uid)){
+			apiResponse.SetError("E001", "用户不存在");
+			return renderString(response, apiResponse);
+		}
+		apiLike.setUid(uid);
+		
+		//图片id
+		if(StringUtils.isEmpty(paramMap.get("photoId"))){
+			apiResponse.SetError("E201", "图片不存在");
+			return renderString(response, apiResponse);
+		}
+		apiLike.setPhotoId(paramMap.get("photoId"));
+
+		//是否已赞
+		if(!apiLikeService.isLiked(apiLike)){
+			apiResponse.SetError("E202", "用户未赞过");
+			return renderString(response, apiResponse);
+		}
+		int res = apiLikeService.delete(apiLike);
+		if(res<1){
+			apiResponse.SetError("E204", "取赞失败");
+			return renderString(response, apiResponse);
+		}
+		//重置点赞数
+		int likeCount = apiLikeService.findCountByPhotoId(paramMap.get("photoId"));
+		String likeCountStr = "0";
+		if(likeCount > 0){
+			likeCountStr = String.valueOf(likeCount);
+		}
+		System.out.println(likeCountStr);
+		apiPhotoService.setCount("like_count", likeCountStr, paramMap.get("photoId"));
+		apiResponse.setSuccessMessage("取赞成功");
+		
+		return renderString(response, apiResponse);
+	}
+
+
 	
 	
 

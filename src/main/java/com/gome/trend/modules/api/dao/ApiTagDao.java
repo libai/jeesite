@@ -17,6 +17,8 @@ import com.gome.trend.modules.api.entity.ApiTag;
 @MyBatisDao
 public interface ApiTagDao extends CrudDao<ApiTag> {
 
-	//List<ApiTag> findListByPhotoIds(String[] photoids);
+	public List<ApiTag> findListByPhotoIds(List<String> photoids);
+
+	public List<Long> findCountByPhotoIds(List<String> photoids);
 	
 }

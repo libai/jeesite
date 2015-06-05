@@ -3,6 +3,7 @@
  */
 package com.gome.trend.modules.api.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
@@ -31,6 +32,17 @@ public class ApiPhoto extends DataEntity<ApiPhoto> {
 	private String forward;
 	private String limit;
 	
+	
+	//附加数据
+	private long commentCount = 0;// 评论总数
+	private List<ApiComment> comments = new ArrayList<ApiComment>();// 评论
+	
+	private long likeCount;// 点赞总数
+	private List<ApiUser> likeUser;//点赞
+	
+	
+	private long tagCount;// 标签 
+	private List<ApiTag> tags;// 标签
 	
 	public ApiPhoto() {
 		super();
@@ -133,6 +145,52 @@ public class ApiPhoto extends DataEntity<ApiPhoto> {
 		this.status = status;
 	}
 
+	public long getCommentCount() {
+		return commentCount;
+	}
 
-	
+	public void setCommentCount(long commentCount) {
+		this.commentCount = commentCount;
+	}
+
+	public List<ApiComment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<ApiComment> comments) {
+		this.comments = comments;
+	}
+
+	public long getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(long likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public List<ApiUser> getLikeUser() {
+		return likeUser;
+	}
+
+	public void setLikeUser(List<ApiUser> likeUser) {
+		this.likeUser = likeUser;
+	}
+
+	public long getTagCount() {
+		return tagCount;
+	}
+
+	public void setTagCount(long tagCount) {
+		this.tagCount = tagCount;
+	}
+
+	public List<ApiTag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<ApiTag> tags) {
+		this.tags = tags;
+	}
+
 }

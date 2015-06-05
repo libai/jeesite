@@ -3,13 +3,14 @@
  */
 package com.gome.trend.modules.api.service;
 
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.service.CrudService;
 import com.gome.trend.modules.api.entity.ApiLike;
 import com.gome.trend.modules.api.dao.ApiLikeDao;
 
@@ -35,13 +36,41 @@ public class ApiLikeService extends CrudService<ApiLikeDao, ApiLike> {
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(ApiLike apiLike) {
-		super.save(apiLike);
+	public int save(ApiLike apiLike) {
+		int res = 0;
+		try {
+			res = super.save(apiLike);
+		} catch (SQLException e) {
+			res = 0;
+			e.printStackTrace();
+		}
+		return res;
 	}
 	
 	@Transactional(readOnly = false)
-	public void delete(ApiLike apiLike) {
-		super.delete(apiLike);
+	public int delete(ApiLike apiLike) {
+		int res = 0;
+		try {
+			res = super.delete(apiLike);
+		} catch (SQLException e) {
+			res = 0;
+			e.printStackTrace();
+		}
+		return res;
 	}
 	
+	public boolean isLiked(ApiLike apiLike){
+		//dao.findLike
+		int likenum = dao.findIsLiked(apiLike);
+		if(likenum>0)
+		return true;
+		else return false;
+	}
+
+	public int findCountByPhotoId(String photoId) {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("photoId",  photoId);
+		return dao.findCountByPhotoId(params);
+	}
+
 }

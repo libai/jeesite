@@ -12,11 +12,9 @@
 		a.color AS "color",
 		a.status AS "status",
 		a.create_by AS "createBy.id",
-		a.create_date AS "createDate",
-		a.update_by AS "updateBy.id",
-		a.update_date AS "updateDate",
-		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.comment_count AS "commentCount",
+		a.like_count AS "likeCount",
+		a.tag_count AS "tagCount"
 	</sql>
 	
 	<sql id="goPhotoJoins">
@@ -47,6 +45,38 @@
 			</when>
 			<otherwise>
 				ORDER BY a.photo_id DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+		
+	<select id="findListByParams" parameterType="Map" resultType="ApiPhoto">
+		SELECT 
+			<include refid="goPhotoColumns"/>
+		FROM go_photo a
+		<include refid="goPhotoJoins"/>
+		<where>
+			a.del_flag=0
+		</where>
+			<if test="startId != null and startId != '' and startId !='0'">
+				AND a.photo_id
+					<choose>
+						<when test='forward == "Y"'>
+						>
+						</when>
+						<otherwise>	
+						 &lt;
+						</otherwise>
+					</choose>	
+				#{startId}
+			</if>
+			ORDER BY a.photo_id DESC
+		<choose>
+			<when test="limit !=null and limit != ''">
+					limit 0,${limit}
+			</when>
+			<otherwise>	
+			limit 0,10
 			</otherwise>
 		</choose>
 	</select>
@@ -102,6 +132,24 @@
 			#{delFlag}
 		)
 	</insert>
+	<update id="updateCount" parameterType="Map">
+		UPDATE go_photo SET  ${field}=${field}
+			<choose>
+				<when test='inc == "d"'>
+				-
+				</when>
+				<otherwise>
+				+
+				</otherwise>
+			</choose>
+			1  	
+		WHERE photo_id = #{photoId}
+	</update>
+	
+	<update id="setCount" parameterType="Map">
+		UPDATE go_photo SET ${field}=${value}
+		WHERE photo_id = #{photoId}
+	</update>
 	
 	<update id="update">
 		UPDATE go_photo SET 	
@@ -116,7 +164,7 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
-		WHERE id = #{id}
+		WHERE photo_id = #{photoId}
 	</update>
 	
 	<update id="delete">

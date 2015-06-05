@@ -24,6 +24,7 @@ public class ApiComment extends DataEntity<ApiComment> {
 	private String postUid;		// 发布用户
 	private String photoId;		// 图片id
 	private String delBy;		// 删除用户
+
 	
 	public ApiComment() {
 		super();
@@ -111,6 +112,13 @@ public class ApiComment extends DataEntity<ApiComment> {
 
 	public void setDelBy(String delBy) {
 		this.delBy = delBy;
+	}
+	
+	public ApiComment getObject(){
+		ApiComment comment = new ApiComment();
+		comment.setCommentId(this.commentId);
+		//comment.setCommentId(this.commentId);
+		return comment;
 	}
 	
 }
