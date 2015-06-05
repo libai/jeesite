@@ -45,8 +45,8 @@ public class ApiTagService extends CrudService<ApiTagDao, ApiTag> {
 		super.delete(apiTag);
 	}
 
-	public List<ApiTag> findListByPhotoIds(String[] photoids) {
-		return dao.findListByPhotoIds(photoids);
-	}
+//	public List<ApiTag> findListByPhotoIds(String[] photoids) {
+//		return dao.findListByPhotoIds(photoids);
+//	}
 
 }
