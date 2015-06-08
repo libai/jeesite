@@ -38,6 +38,18 @@
         
             <div class="base_area_img_con">
             	<div class="base_area_img"><img  id="uploadImg"/></div>
+            	<div class="upload_btnd" style="display:none;text-align: left;">
+	            	<div class="inline-labels" style="margin-top:3px">
+					    <label>X<input type="text" name="x" id="x" class="cut-params" style="width:50px"></label>
+					    <label>Y<input type="text" name="y" id="y" class="cut-params" style="width:50px"></label>
+					    <label>W<input type="text" name="w" id="w" class="cut-params" style="width:50px"></label>
+					    <label>H<input type="text" name="h" id="h" class="cut-params" style="width:50px"></label>
+					</div>
+	            	
+	            	
+	            	<div ><button class="btn btn-primary" id="next">下一步</button></div>
+                 </div>
+                  
                   <!-- 
                
                 <div class="base_tag_stysp"><span class="base_tag_ico"></span><a class="base_tag_con">商品标签</a></div>
@@ -48,9 +60,12 @@
             
             <div class="base_infm_ty mgtop30">此刻心情</div>
             <div class="base_infm_bd">
-            	<textarea class="textare"></textarea>
+            	<textarea class="textare" style="height:100px;"></textarea>
                 <div class="base_are_zs">140/140</div>
             </div>
+            <div ><button class="btn btn-primary" id="next">提交保存</button></div>
+            
+            
         </div>
     </div>
 </div>
@@ -99,7 +114,13 @@ var uploader = new plupload.Uploader({
 				var response = $.parseJSON(res.response);
 		
 				$("#uploadImg").attr("src", "/jeesite/"+response.fileUrl).unbind("load").load(function(){
-					$('#uploadImg').Jcrop();
+					$('#uploadImg').Jcrop({
+					      onChange:   showCoords,
+					      onSelect:   showCoords,
+					      onRelease:  clearCoords
+					    },function(){
+					      jcrop_api = this;
+					    });
 				});
 				
 			}else{
@@ -108,22 +129,51 @@ var uploader = new plupload.Uploader({
 		},
 		UploadComplete:function(up, file){
 			$("#upload_info").text("");
-			//$()
+			$(".upload_btnd").show();
 			
 			
 		}
 	}
 	
 });
+
+//裁剪控制
+function showCoords(c){
+    $('#x').val(c.x);
+    $('#y').val(c.y);
+    $('#w').val(c.w);
+    $('#h').val(c.h);
+ };
+ 
+ function clearCoords()
+ {
+   $('.cut-params').val('');
+ };
+ $('.cut-params').on('change', function(){
+     var x = $('#x').val(),
+     y = $('#y').val(),
+     w = $('#w').val(),
+     h = $('#h').val(),
+     x2 = x+w,
+     y2 = y+h;
+ 	jcrop_api.setSelect([x, y, x2, y2]);
+});
+
 uploader.init();
 </script>
 <script type="text/javascript">
+//流程控制
+$("#next").click(function(){
+	var html = '<img  id="uploadImg" src="${ctx}/content/goPhoto/cut/?x=0&y=0&w=200&h=200"/>';
+	$(".base_area_img").html(html);
+	return false;
+});
+
+</script>
+<script type="text/javascript">
+//标记操作
 
 
-/*标记添加
-$("#uploadImg").bind("click", function(){
-	
-});*/
 </script>
 </body>
 </html>
