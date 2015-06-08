@@ -1,0 +1,319 @@
+@charset "utf-8";
+/* CSS Document */
+a,a:hover{
+	text-decoration:none;	
+}
+.upload{
+	width:100%;
+	height:auto;
+	}
+.base_infm{
+	height:250px;
+	border:1px solid #ccc;
+	}	
+.base_infm_title{
+	height:40px;
+	font-size:18px;
+	border-bottom:1px solid #ccc;
+	background:#eee;
+	text-indent:10px;
+	line-height:40px;
+	}
+.base_infm_con{
+	padding:10px;
+	}
+.base_infm_ty{
+	height:34px;
+	line-height:34px;
+	border-bottom:1px solid #ccc;
+	line-height:34px;
+	font-size:14px;
+	font-weight:bold;
+	}
+.base_infm_bd{
+	margin-top:10px;
+	}	
+.mgtop10{
+	margin-top:10px;
+	}	
+.textare{
+	width:99%;
+	}
+.base_btn{
+	text-align:right;
+	}
+.base_btn button{
+	margin:20px 20px 0 0;
+	}	
+.base_infm_tx{
+	text-align:right
+	}
+.base_content{
+	height:700px;
+	border:1px solid #ccc;
+	}				
+.base_area_img{
+	margin-top:10px;
+	}
+.mgtop30{
+	margin-top:30px;
+	}
+.base_user_zs{
+	color:#f00;
+	font-size:12px;
+	margin-left:20px;
+	}	
+.base_are_zs{
+	text-align:right;
+	}	
+/******图片上传*******/		
+.upload_box{
+	width:600px;
+	height:740px;
+	border:1px solid #ccc;
+	background:#FFF;
+	}
+.upload_box_tit{
+	height:50px;
+	background:#333;
+	line-height:50px;
+	font-size:18px;
+	text-indent:10px;
+	color:#FFF;
+	}	
+.close_icon{
+	float:right;
+	font-size:18px;
+	color:#FFF;
+	padding-right:16px;
+	}
+.close_icon:hover{
+	color:#FFF;
+	text-decoration:none;	
+	}
+.upload_bdbtn{
+	margin:10px 0 0 10px;
+	}
+.upload_imarea img{
+	width:580px;
+	height:340px;
+	margin:16px 0 0 10px;
+	}	
+.upload_btnd{
+	height:50px;
+	border-top:1px solid #ccc;
+	margin-top:30px;
+	text-align:right;
+	}
+.upload_btnd button{
+	margin-top:10px;
+	margin-right:10px;
+	margin-bottom:10px;
+	}	
+.upload_imarea01{
+	width:580px;
+	height:578px;
+
+	}
+.upload_fstwo{
+	position:relative;	
+	}						
+.upload_imarea01 img{
+	width:580px;
+	height:578px;
+	margin:16px 0 0 10px;
+	}
+	
+.uplod_ict_bq{
+	width:282px;
+	height:30px;
+	position:absolute;
+	left:100px;
+	top:100px;
+	background:url(../images/up_ict.png) no-repeat rgba(240,240,240,.5);
+	border-bottom-left-radius:15px;
+	border-top-left-radius:15px;
+	}	
+.upload_shop_ico{
+	width:116px;
+	float:left;
+	height:30px;
+	display:inline-block;
+	background:url(../images/ict_shop.png) no-repeat left center;
+	border-right:1px solid #333;
+	line-height:30px;
+	margin-left:34px;
+	text-indent:36px;
+	color:#111;
+	}	
+.upload_text_wb{
+	width:116px;
+	float:left;
+	height:30px;
+	display:inline-block;
+	background:url(../images/ict_text.png) no-repeat left center;
+	line-height:30px;
+	text-indent:36px;
+	color:#111;
+	margin-left:10px;
+	}	
+
+.up_shop_icon a.up_shop_icon_a{
+	width:30px;
+	height:30px;
+	display:inline-block;
+	background:url(../images/up_ict_hv.png) no-repeat;
+	}
+.up_shop_con{
+	width:198px;
+	height:auto;
+	border:1px solid #ccc;
+	background:#fff;
+	padding:10px;
+	}	
+.up_shop_con_title{
+	height:40px;
+	line-height:40px;
+	font-size:13px;
+	color:#FFF;
+	text-indent:10px;
+	background:#000;
+	}	
+.up_shop_id{
+	}	
+.mgtop10{
+	margin-top:10px;
+	}
+.up_shop_tx input{
+	width:182px;
+	margin-top:2px;
+	}	
+.up_shop_btn{
+	border-top:1px solid #ccc;
+	}	
+.up_shop_btn button{
+	margin:10px 0 0 30px;
+	}
+.up_shop_zs{
+	text-align:right;
+	}	
+.up_shop_add{
+	position:absolute;
+	left:100px;
+	top:490px;
+	}	
+.up_text_add{
+	position:absolute;
+	left:100px;
+	top:440px;	
+	}	
+.up_shop_add_con{
+	width:244px;
+	height:30px;
+	position:absolute;
+	left:14px;
+	top:0;
+	}	
+.up_shop_add_sj{
+	float:left;
+	width:21px;
+	height:30px;
+	background:url(../images/sj_icon.png) no-repeat;
+	}
+.up_shop_add_spnr{
+	max-width:120px;
+	float:left;
+	height:30px;
+	background:url(../images/ict_shop.png) no-repeat left center #000;
+	background-size:14px 13px;
+	line-height:30px;
+	padding-left:20px;
+	color:#FFF;
+	padding-right:10px;
+	}
+.up_shop_add_wbnr{
+	max-width:120px;
+	float:left;
+	height:30px;
+	background:url(../images/ict_text.png) no-repeat left center #000;
+	background-size:14px 13px;
+	line-height:30px;
+	padding-left:20px;
+	color:#FFF;
+	padding-right:10px;
+	}
+.up_shop_add_btn{
+	float:left;
+	}
+.up_shop_add_btn a:hover{
+	color:#09C;
+	}	
+.btn_idet{
+	width:50px;
+	height:30px;
+	display:inline-block;
+	text-align:center;
+	line-height:30px;
+	color:#FFF;
+	background:#ffa200;
+	}	
+.btn_delet{
+	width:50px;
+	height:30px;
+	display:inline-block;
+	text-align:center;
+	line-height:30px;
+	color:#FFF;
+	background:#C00;
+	border-bottom-right-radius:6px;
+	border-top-right-radius:6px;
+	}
+.base_tag_stysp,.base_tag_stywb{
+	width:132px;
+	height:30px;
+	background:#000;
+	border-radius:5px;
+	padding-top:5px;
+	padding-bottom:5px;
+	}	
+.base_tag_ico{
+	width:40px;
+	height:30px;
+	display:inline-block; 
+	float:left;
+	background:url(../images/ict_shop.png) no-repeat 10px 5px;
+	background-size:20px 18px;
+	border-right:1px solid #ccc;
+	}
+.base_tag_icowb{
+	width:40px;
+	height:30px;
+	display:inline-block; 
+	float:left;
+	background:url(../images/ict_text.png) no-repeat 10px 5px;
+	background-size:20px 18px;
+	border-right:1px solid #ccc;
+	}	
+.base_area_img_con{
+	position:relative;
+	}
+.base_tag_stysp{
+	position:absolute;
+	left:100px;
+	top:100px;
+	}
+.base_tag_stywb{
+	position:absolute;
+	left:100px;
+	top:150px;
+	}			
+.base_tag_con{
+	float:left;
+	}
+.base_tag_con{
+	font-size:13px;
+	color:#FFF;
+	line-height:30px;
+	text-indent:15px;
+	}									
+
