@@ -49,12 +49,15 @@ public class LoginController extends BaseController{
 	public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Principal principal = UserUtils.getPrincipal();
 
-//		// 默认页签模式
-//		String tabmode = CookieUtils.getCookie(request, "tabmode");
-//		if (tabmode == null){
-//			CookieUtils.setCookie(response, "tabmode", "1");
-//		}
-		
+		// 默认页签模式
+		String tabmode = CookieUtils.getCookie(request, "tabmode");
+		if (tabmode == null){
+			CookieUtils.setCookie(response, "tabmode", "0");
+		}
+		//默认主题
+		CookieUtils.setCookie(response, "theme", "cerulean");
+
+
 		if (logger.isDebugEnabled()){
 			logger.debug("login, active session size: {}", sessionDAO.getActiveSessions(false).size());
 		}

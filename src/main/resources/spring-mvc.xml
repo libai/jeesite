@@ -119,4 +119,5 @@
 		<property name="maxUploadSize" value="${web.maxUploadSize}" />  
 	</bean>
 	
+	 <mvc:resources mapping="/prodimg/**" location="/prodimg/" />  
 </beans>

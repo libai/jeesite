@@ -81,7 +81,6 @@ public class ApiPhotoService extends CrudService<ApiPhotoDao, ApiPhoto> {
 			photoids.add(photoid);
 			uids.add(apiphoto.getUid());
 		}
-		//apiCommentService.proHello();
 		
 		List<ApiComment> apiCommentList = apiCommentService.findTest();
 		
